@@ -87,6 +87,10 @@ int lcd1602_exp_write_byte(uint8_t addr, uint8_t byte)
 
     return ret;
 }
+void lcd1602_update_backlight(lcd1602_t *lcd)
+{
+    lcd1602_exp_write_byte(lcd->i2caddr, LCD1602_BACKLIGHT * (1 && lcd->backlight))
+}
 
 void lcd1602_backlight(lcd1602_t *lcd, uint8_t *sendb, uint8_t flags)
 {
@@ -152,7 +156,7 @@ void lcd1602_create_char(lcd1602_t *lcd, uint8_t location, uint8_t *charmap)
 
 void lcd1602_dcb_set(lcd1602_t *lcd, bool displayon, bool cursoron, bool blinkon)
 { //display, cursor, blinking cursor
-    lcd->dcb = (displayon * LCD1602_DISPLAYON) | (cursoron * LCD1602_CURSORON) | (blinkon * LCD1602_BLINKON);
+    lcd->dcb = (displayon * LCD1602_DISPLAYON) | ((cursoron && 1) * LCD1602_CURSORON) | ((blinkon && 1) * LCD1602_BLINKON);
 }
 
 void lcd1602_set_pos(lcd1602_t *lcd, uint8_t row, uint8_t col)
@@ -163,7 +167,7 @@ void lcd1602_set_pos(lcd1602_t *lcd, uint8_t row, uint8_t col)
 
 void lcd1602_entry_set(lcd1602_t *lcd, bool direction, bool shift)
 {
-    lcd->entrymode = (direction * LCD1602_ENTRYLEFT) | (shift * LCD1602_ENTRYSHIFTINCREMENT);
+    lcd->entrymode = ((direction && 1) * LCD1602_ENTRYLEFT) | ((shift && 1)* LCD1602_ENTRYSHIFTINCREMENT);
 }
 
 void lcd1602_entry_update(lcd1602_t *lcd)
