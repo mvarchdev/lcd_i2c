@@ -80,8 +80,8 @@ void lcd1602_rl_shift(lcd1602_t *lcd, uint8_t cur_display, uint8_t direction);
 ```
 Shifts display (showing of DDRAM contents) or cursor to either left or right
 `lcd` - pointer to lcd1602_t struct
-`cur_display` - cursor (LCD1602_CURSORMOVE) or display (LCD1602_DISPLAYMOVE) shift select
-`direction` - direction select: left (LCD1602_MOVELEFT), rght (LCD1602_MOVERIGHT)
+`cur_display` - cursor (`LCD1602_CURSORMOVE`) or display (`LCD1602_DISPLAYMOVE`) shift select
+`direction` - direction select: left (`LCD1602_MOVELEFT`), right (`LCD1602_MOVERIGHT`)
 
 ```c
 void lcd1602_set_pos(lcd1602_t *lcd, uint8_t row, uint8_t col);
