@@ -89,7 +89,7 @@ int lcd1602_exp_write_byte(uint8_t addr, uint8_t byte)
 }
 void lcd1602_update_backlight(lcd1602_t *lcd)
 {
-    lcd1602_exp_write_byte(lcd->i2caddr, LCD1602_BACKLIGHT * (1 && lcd->backlight))
+    lcd1602_exp_write_byte(lcd->i2caddr, LCD1602_BACKLIGHT * (1 && lcd->backlight));
 }
 
 void lcd1602_backlight(lcd1602_t *lcd, uint8_t *sendb, uint8_t flags)
