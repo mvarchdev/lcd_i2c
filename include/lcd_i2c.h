@@ -21,7 +21,7 @@ void lcd1602_SendString(lcd1602_t *lcd, char *str);
 void lcd1602_init(lcd1602_t *lcd);
 
 void i2c_scan(void);
-void lcd1602_i2c_init(void);
+void lcd1602_i2c_init(uint8_t sda, uint8_t scl, uint8_t i2csel);
 
 void lcd1602_dcb_set(lcd1602_t *lcd, bool displayon, bool cursoron, bool blinkon);
 void lcd1602_entry_set(lcd1602_t *lcd, bool direction, bool shift);

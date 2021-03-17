@@ -4,15 +4,16 @@
 #include <unistd.h>
 #include "lcd_i2c.h"
 
-#define I2C_MASTER_TX_BUF_DISABLE  0                /*!< I2C master do not need buffer */
-#define I2C_MASTER_RX_BUF_DISABLE  0                /*!< I2C master do not need buffer */
-#define I2C_MASTER_FREQ_HZ         100000            /*!< I2C master clock frequency */
+#define I2C_MASTER_TX_BUF_DISABLE 0 /*!< I2C master do not need buffer */
+#define I2C_MASTER_RX_BUF_DISABLE 0 /*!< I2C master do not need buffer */
+#define I2C_MASTER_FREQ_HZ 100000   /*!< I2C master clock frequency */
 
-#define I2C_ACK_CHECK_EN                       (0x1)              /*!< I2C master will check ack from slave*/
-#define I2C_ACK_CHECK_DIS                      (0x0)              /*!< I2C master will not check ack from slave */
+#define I2C_ACK_CHECK_EN (0x1)  /*!< I2C master will check ack from slave*/
+#define I2C_ACK_CHECK_DIS (0x0) /*!< I2C master will not check ack from slave */
 
-#define LCD1602_GPIO_SDA	18
-#define LCD1602_GPIO_SCL	19
+static uint8_t LCD1602_GPIO_SDA = 0;
+static uint8_t LCD1602_GPIO_SCL = 0;
+static uint8_t I2C_NUM_SEL = 0;
 
 #define LCD1602_CLEARDISPLAY (0x01)
 #define LCD1602_RETURNHOME (0x02)
@@ -49,10 +50,9 @@
 #define LCD1602_BACKLIGHT (0x08)
 #define LCD1602_NOBACKLIGHT (0x00)
 
-#define LCD1602_EN 0b00000100  // Enable bit
-#define LCD1602_RW 0b00000010  // Read/Write bit
-#define LCD1602_RS 0b00000001  // Register select bit
-
+#define LCD1602_EN 0b00000100 // Enable bit
+#define LCD1602_RW 0b00000010 // Read/Write bit
+#define LCD1602_RS 0b00000001 // Register select bit
 
 int lcd1602_exp_write_data(uint8_t addr, uint8_t data[], int len) //write bytes
 {
@@ -61,7 +61,7 @@ int lcd1602_exp_write_data(uint8_t addr, uint8_t data[], int len) //write bytes
     i2c_master_write_byte(hCmd, (addr << 1) | I2C_MASTER_WRITE, I2C_ACK_CHECK_EN);
     i2c_master_write(hCmd, data, len, I2C_ACK_CHECK_EN);
     i2c_master_stop(hCmd);
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_0, hCmd, 0);
+    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_SEL, hCmd, 0);
     i2c_cmd_link_delete(hCmd);
 
     //for (int x = 0; x < len; x++)
@@ -79,7 +79,7 @@ int lcd1602_exp_write_byte(uint8_t addr, uint8_t byte)
     i2c_master_write_byte(hCmd, (addr << 1) | I2C_MASTER_WRITE, I2C_ACK_CHECK_EN);
     i2c_master_write_byte(hCmd, byte, I2C_ACK_CHECK_EN);
     i2c_master_stop(hCmd);
-    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_0, hCmd, 0);
+    esp_err_t ret = i2c_master_cmd_begin(I2C_NUM_SEL, hCmd, 0);
     i2c_cmd_link_delete(hCmd);
     //printf("lcd1602_exp_write_byte: [0x%x]\n", byte);
     //if (ret != ESP_OK)
@@ -224,7 +224,7 @@ void lcd1602_init(lcd1602_t *lcd)
 void i2c_scan(void)
 {
     int res;
-    char info[] = "Scanning I2C bus...\r\n";
+    char info[] = "Scanning I2C bus\n";
 
     printf("%s", info);
 
@@ -235,20 +235,22 @@ void i2c_scan(void)
         {
             char msg[64];
 
-            snprintf(msg, sizeof(msg), "0x%02X", i);
+            snprintf(msg, sizeof(msg), "0x%02X ", i);
             printf("%s", msg);
         }
         else
         {
-            printf("%s", ".");
+            printf("%s", "N ");
         }
     }
-
-    printf("%s", "\r\n");
+    printf("\n");
 }
 
-void lcd1602_i2c_init(void)
+void lcd1602_i2c_init(uint8_t sda, uint8_t scl, uint8_t i2csel)
 {
+    LCD1602_GPIO_SDA = sda;
+    LCD1602_GPIO_SCL = scl;
+    I2C_NUM_SEL = i2csel;
     i2c_config_t conf;
     conf.mode = I2C_MODE_MASTER;
     conf.sda_io_num = LCD1602_GPIO_SDA;
@@ -257,8 +259,8 @@ void lcd1602_i2c_init(void)
     conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
     conf.master.clk_speed = I2C_MASTER_FREQ_HZ;
     conf.clk_flags = 0;
-    i2c_param_config(I2C_NUM_0, &conf);
-    i2c_driver_install(I2C_NUM_0, conf.mode,
+    i2c_param_config(I2C_NUM_SEL, &conf);
+    i2c_driver_install(I2C_NUM_SEL, conf.mode,
                        I2C_MASTER_RX_BUF_DISABLE,
                        I2C_MASTER_TX_BUF_DISABLE, 0);
 }
