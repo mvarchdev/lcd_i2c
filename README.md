@@ -38,4 +38,58 @@ void lcd1602_create_char(lcd1602_t *lcd, uint8_t location, uint8_t *charmap);
 Used to create custom chars (Up to 8 memory space available when running 5x8 mode)
 `*lcd` - pointer to lcd,
 `location` - location in memory (0-7),
-`*charmap` - uint8_t[8] array where each index is one row in character bank, (for example 0b010111 -> 0 == block off, 1 == block on)
+`*charmap` - uint8_t[8] array where each index is one row in character bank, (for example 0b010111 -> 0 == block off, 1 == block on), see example code
+
+```c
+void lcd1602_update_backlight(lcd1602_t *lcd);
+```
+Used for on/off backlight (before call, set lcd.backlight to either `true` or `false`)
+
+```c
+void lcd1602_dcb_set(lcd1602_t *lcd, bool displayon, bool cursoron, bool blinkon);
+```
+Sets the dcb bits in `lcd1602_t` structure, to apply changes call `lcd1602_dcb_update`
+
+```c
+void lcd1602_dcb_update(lcd1602_t *lcd);
+```
+Updates and applies changes from lcd->dcb to display
+
+```c
+void lcd1602_entry_set(lcd1602_t *lcd, bool direction, bool shift);
+```
+Sets the entry bits in lcd1602_t structure, `direction` -> 0 = right, 1 = left, `shift` -> 0 = Entry shift decrement, 1 = Entry shift increment
+
+```c
+void lcd1602_entry_update(lcd1602_t *lcd);
+```
+Updates and applies entry bits from lcd1602_t to display
+
+```c
+void lcd1602_jumptohome(lcd1602_t *lcd);
+```
+Jumps to home and sets cursor to the original position if shifted
+
+```c
+void lcd1602_clear(lcd1602_t *lcd);
+```
+Clears whole DDRAM (Whole display memory, so nothing will show up, even if shifted)
+
+```c
+void lcd1602_rl_shift(lcd1602_t *lcd, uint8_t cur_display, uint8_t direction);
+```
+Shifts display (showing of DDRAM contents) or cursor to either left or right
+`lcd` - pointer to lcd1602_t struct
+`cur_display` - cursor (LCD1602_CURSORMOVE) or display (LCD1602_DISPLAYMOVE) shift select
+`direction` - direction select: left (LCD1602_MOVELEFT), rght (LCD1602_MOVERIGHT)
+
+```c
+void lcd1602_set_pos(lcd1602_t *lcd, uint8_t row, uint8_t col);
+```
+Sets position of cursor in DDRAM space
+`lcd` - pointer to the lcd1602_t struct
+`row` - row 0 (first) or 1 (second)
+`col` - column select, can be more than 16 because DDRAM is bigger than the display (up to 2^6 = 64, from 0 to 63)
+
+## EXAMPLE PROJECT
+Here is example project repo -> https://github.com/mvarchdev/lcd1602_test
