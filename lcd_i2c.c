@@ -134,7 +134,7 @@ void lcd1602_send_data(lcd1602_t *lcd, uint8_t data)
     usleep(48);
 }
 
-void lcd1602_SendString(lcd1602_t *lcd, char *str)
+void lcd1602_send_string(lcd1602_t *lcd, char *str)
 {
     while (*str)
     {

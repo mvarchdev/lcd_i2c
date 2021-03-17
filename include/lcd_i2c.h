@@ -16,7 +16,7 @@ void lcd1602_create_char(lcd1602_t *lcd, uint8_t location, uint8_t *charmap);
 int lcd1602_send8_pulse(lcd1602_t *lcd, uint8_t data, uint8_t flags);
 void lcd1602_send_command(lcd1602_t *lcd, uint8_t cmd);
 void lcd1602_send_data(lcd1602_t *lcd, uint8_t data);
-void lcd1602_SendString(lcd1602_t *lcd, char *str);
+void lcd1602_send_string(lcd1602_t *lcd, char *str);
 
 void lcd1602_init(lcd1602_t *lcd);
 

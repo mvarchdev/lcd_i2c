@@ -33,6 +33,11 @@ lcd1602_dcb_set(&lcdtmp, 1, 0, 0);
 ## FUNCTION DESCRIPTIONS
 
 ```c
+void lcd1602_send_string(lcd1602_t *lcd, char *str);
+```
+Sends string to the lcd specified by lcd1602_t struct
+
+```c
 void lcd1602_create_char(lcd1602_t *lcd, uint8_t location, uint8_t *charmap);
 ```
 Used to create custom chars (Up to 8 memory space available when running 5x8 mode)
