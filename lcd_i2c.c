@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "driver/i2c.h"
 #include <unistd.h>
-#include "lcd1602_lib.h"
+#include "lcd_i2c.h"
 
 #define I2C_MASTER_TX_BUF_DISABLE  0                /*!< I2C master do not need buffer */
 #define I2C_MASTER_RX_BUF_DISABLE  0                /*!< I2C master do not need buffer */
