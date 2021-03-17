@@ -31,3 +31,11 @@ lcd1602_dcb_set(&lcdtmp, 1, 0, 0);
 #### 5. Use it!
 
 ## FUNCTION DESCRIPTIONS
+
+```c
+void lcd1602_create_char(lcd1602_t *lcd, uint8_t location, uint8_t *charmap);
+```
+Used to create custom chars (Up to 8 memory space available when running 5x8 mode)
+`*lcd` - pointer to lcd,
+`location` - location in memory (0-7),
+`*charmap` - uint8_t[8] array where each index is one row in character bank, (for example 0b010111 -> 0 == block off, 1 == block on)
