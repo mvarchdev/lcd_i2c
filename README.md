@@ -28,7 +28,13 @@ lcdtmp.backlight = 1;
 ```c
 lcd1602_dcb_set(&lcdtmp, 1, 0, 0);
 ```
-#### 5. Use it!
+#### 5. Init display (Send display init sequence)
+
+```c
+lcd1602_init(&lcdtmp);
+```
+
+#### 6. Use it!
 
 ## FUNCTION DESCRIPTIONS
 
