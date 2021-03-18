@@ -100,7 +100,7 @@ void lcd1602_set_pos(lcd1602_t *lcd, uint8_t row, uint8_t col);
 Sets position of cursor in DDRAM space
 `lcd` - pointer to the lcd1602_t struct
 `row` - row 0 (first) or 1 (second)
-`col` - column select, can be more than 16 because DDRAM is bigger than the display (up to 2^6 = 64, from 0 to 63)
+`col` - column select, can be more than 16 because DDRAM is bigger than the display (80 * 8 bits register = 80 characters = 40 chars on one line)
 
 ## EXAMPLE PROJECT
 Here is example project repo -> https://github.com/mvarchdev/lcd1602_test
